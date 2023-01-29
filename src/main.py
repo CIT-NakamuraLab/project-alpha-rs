@@ -35,7 +35,7 @@ def start_controller():
 def main():
     with ProcessPoolExecutor() as executor:
         executor.submit(start_nfc_reader)
-        executor.submit(start_controller())
+        executor.submit(start_controller)
 
 
 if __name__ == "__main__":

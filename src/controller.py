@@ -1,11 +1,7 @@
 import sys
-
 import serial
 from serial import SerialException
-
-raw_text = ""
-inte = ""
-deci = ""
+from time import time
 
 
 def serial_init():
@@ -19,10 +15,47 @@ def serial_init():
 
 
 def serial_read(serial_port):
-    global raw_text, inte, deci
     try:
-        while True:
-            raw_text = serial_port.readline().decode('utf8').replace('\r', '').replace('\n', '')
-            inte, deci = raw_text.split('.')
+        # どんな理由であれ、5回データ取得に失敗したらエラーを返します。
+        for try_count in range(5):
+
+            # ゴミ防止
+            serial_port.read(serial_port.inWaiting())
+
+            # 1バイトデータを送信してデータ要求。'a'に意味は無い。
+            serial_port.write(b'a')
+            # 0.1秒待ちます。返答が来なければリトライします。
+            for i in range(10):
+                if serial_port.inWaiting() >= 3:
+                    break
+                time.sleep(0.01)
+            else:
+                continue
+
+            # シリアルポートのバッファを読み込みます。
+            # ヘッダっぽい物があったら次に進みます。
+            for i in range(serial_port.inWaiting()):
+                if b'\x00' == serial_port.read():
+                    break
+            else:
+                continue
+
+            data = int.from_bytes(serial_port.read(), 'big')
+            data_check = int.from_bytes(serial_port.read(), 'big')
+
+            # データチェック
+            if data & 0xff != ~data_check & 0xff:
+                continue
+
+            out = []
+            for i in range(8):
+                out.append((data >> i) % 2 == 1)
+
+            return True, out
+
+        else:
+            return False, []
+
     except KeyboardInterrupt:
         serial_port.close()
+        return False, []

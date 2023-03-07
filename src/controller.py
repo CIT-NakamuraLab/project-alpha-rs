@@ -1,15 +1,15 @@
 import sys
 import serial
+import time
 from serial import SerialException
-from time import time
 
 
-def serial_init():
+def serial_init(com):
     try:
-        serial_port = serial.Serial("COM8", 115200)
-        print('OPEN COM8')
+        serial_port = serial.Serial(com, 115200)
+        print('OPEN ' + com)
     except SerialException:
-        print("シリアルポートを開けません。")
+        print(com + "シリアルポートを開けません。")
         sys.exit(-1)
     return serial_port
 
@@ -59,3 +59,13 @@ def serial_read(serial_port):
     except KeyboardInterrupt:
         serial_port.close()
         return False, []
+
+
+if __name__ == "__main__":
+    sp = serial_init("COM21")
+    while True:
+        i = input(">>")
+        if "exit" == i:
+            break
+        print(serial_read(sp))
+

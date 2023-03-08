@@ -49,7 +49,7 @@ def serial_read(serial_port):
 
             out = []
             for i in range(8):
-                out.append((data >> i) % 2 == 1)
+                out.append((data >> i) % 2)
 
             return True, out
 

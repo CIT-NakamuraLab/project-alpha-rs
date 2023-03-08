@@ -3,13 +3,18 @@ import serial
 import time
 from serial import SerialException
 
+from logging import getLogger
+
+logger = getLogger(__name__)
 
 def serial_init():
+    com = '/dev/ttyACM0'
+    baudrate = 115200
     try:
-        serial_port = serial.Serial("COM8", 115200)
-        print('OPEN COM8')
+        serial_port = serial.Serial(com, baudrate)
+        logger.info(f"{com} OPEN.")
     except SerialException:
-        print("シリアルポートを開けません。")
+        logger.error(f"Cannot open {com}.")
         sys.exit(-1)
     return serial_port
 
@@ -54,6 +59,7 @@ def serial_read(serial_port):
             return True, out
 
         else:
+            logger.warning("Failed to get button/key data.")
             return False, []
 
     except KeyboardInterrupt:

@@ -1,7 +1,7 @@
 import sys
 import serial
+import time
 from serial import SerialException
-from time import time
 
 
 def serial_init():

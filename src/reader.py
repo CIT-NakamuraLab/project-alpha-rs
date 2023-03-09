@@ -1,3 +1,4 @@
+import os
 from time import sleep
 
 import nfc
@@ -42,6 +43,8 @@ class Reader:
                         if self.array[7] is 0:
                             logger.warning("Serial Data is invalid!")
                             logger.warning("DATA won't send to Control Server!!")
+                            logger.error('Reboot the system.')
+                            os.system('systemctl reboot -i')
                             break
                         else:
                             # TODO: POST data to Control Server

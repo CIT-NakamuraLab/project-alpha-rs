@@ -38,7 +38,8 @@ def start_controller(flag, shared_array):
                     # The flag is released and the reader is notified that the value has been set.
                     flag.clear()
                 else:
-                    continue
+                    shared_array[7] = 0
+                    flag.clear()
             except KeyboardInterrupt:
                 serial_port.close()
 

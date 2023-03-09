@@ -1,4 +1,4 @@
-import sys
+import os
 import serial
 import time
 from serial import SerialException
@@ -14,8 +14,9 @@ def serial_init():
         serial_port = serial.Serial(com, baudrate)
         logger.info(f"{com} OPEN.")
     except SerialException:
-        logger.error(f"Cannot open {com}.")
-        sys.exit(-1)
+        logger.error(f"Cannot open {com}")
+        logger.error('Reboot the system.')
+        os.system('systemctl reboot -i')
     return serial_port
 
 
@@ -62,6 +63,7 @@ def serial_read(serial_port):
             logger.warning("Failed to get button/key data.")
             return False, []
 
-    except KeyboardInterrupt:
-        serial_port.close()
+    # エラー吐いたら問答無用でお返しします
+    except:
+        logger.error("Failed to get button/key data.")
         return False, []

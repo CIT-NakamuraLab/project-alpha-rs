@@ -62,6 +62,7 @@ def serial_read(serial_port):
             logger.warning("Failed to get button/key data.")
             return False, []
 
-    except KeyboardInterrupt:
-        serial_port.close()
+    # エラー吐いたら問答無用でお返しします
+    except:
+        logger.error("Failed to get button/key data.")
         return False, []

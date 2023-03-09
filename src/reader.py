@@ -1,3 +1,5 @@
+from time import sleep
+
 import nfc
 
 from logging import getLogger
@@ -34,10 +36,16 @@ class Reader:
                 self.flag.set()
                 while True:
                     logger.info("Retrieving serial data from Controller...")
+                    sleep(0.01)
                     if not self.flag.is_set():
-                        logger.info(f"Data Received!: {self.array[1]}")
-                        # TODO: POST data to Control Server
-                        break
+                        logger.info(f"Data Received!: {self.array}")
+                        if self.array[7] is 0:
+                            logger.warning("Serial Data is invalid!")
+                            logger.warning("DATA won't send to Control Server!!")
+                            break
+                        else:
+                            # TODO: POST data to Control Server
+                            break
 
         else:
             logger.error("TAG TYPE ERROR: Tag isn't Type3Tag")

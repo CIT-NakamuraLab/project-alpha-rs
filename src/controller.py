@@ -8,7 +8,7 @@ from logging import getLogger
 logger = getLogger(__name__)
 
 def serial_init():
-    com = '/dev/ttyACM0'
+    com = '/dev/ttyUSB0'
     baudrate = 115200
     try:
         serial_port = serial.Serial(com, baudrate)

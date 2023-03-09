@@ -6,7 +6,7 @@ import nfc
 import time
 from logging import basicConfig, getLogger, DEBUG
 
-from src.controller import serial_init, serial_read
+from controller import serial_init, serial_read
 from reader import Reader
 
 basicConfig(level=DEBUG)

@@ -2,12 +2,14 @@ import os
 from time import sleep
 
 import nfc
+import dotenv
 
 from logging import getLogger
 
 target_service_code = 0x100b
 
 logger = getLogger(__name__)
+dotenv.load_dotenv()
 
 
 class Reader:

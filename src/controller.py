@@ -1,4 +1,6 @@
 import os
+
+import dotenv
 import serial
 import time
 from serial import SerialException
@@ -6,9 +8,11 @@ from serial import SerialException
 from logging import getLogger
 
 logger = getLogger(__name__)
+dotenv.load_dotenv()
+
 
 def serial_init():
-    com = '/dev/ttyUSB0'
+    com = os.environ.get("COM_PORT")
     baudrate = 115200
     try:
         serial_port = serial.Serial(com, baudrate)
